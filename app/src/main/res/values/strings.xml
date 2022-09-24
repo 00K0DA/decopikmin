@@ -27,6 +27,7 @@
     <string name="decor_type_mountain">山</string>
     <string name="decor_type_weather">天気</string>
     <string name="decor_type_theme_park">テーマパーク</string>
+    <string name="decor_type_bus_stop">バス停</string>
 
     <string name="costume_chef">シェフ</string>
     <string name="costume_shiny_chef">レアシェフ</string>
@@ -64,6 +65,7 @@
     <string name="costume_leaf_hat">葉っぱの帽子</string>
     <string name="costume_theme_park_ticket">テーマパークチケット</string>
     <string name="costume_theme_finger_board">フィンガーボード</string>
+    <string name="costume_theme_bus_parer_craft">バスのペーパークラフト</string>
 
 
     <string name="activity_main_complete_title">コンプリート率: %3.2f\%%</string>

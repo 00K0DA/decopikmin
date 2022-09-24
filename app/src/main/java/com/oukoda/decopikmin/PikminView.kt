@@ -40,13 +40,13 @@ class PikminView(
         setDrawableColor()
 
         binding.cl.setOnClickListener {
-            toggleStatus()
+            updateStatus()
             setStatusText()
             listener.onStatusChanged(pikminType, costume, pikminStatus)
         }
     }
 
-    private fun toggleStatus() {
+    private fun updateStatus() {
         pikminStatus = when (pikminStatus) {
             PikminStatus.AlreadyExists -> PikminStatus.Growing
             PikminStatus.Growing -> PikminStatus.NotHave

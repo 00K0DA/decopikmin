@@ -27,7 +27,8 @@ enum class DecorType {
     SushiRestaurant,
     Mountain,
     Weather,
-    ThemePark;
+    ThemePark,
+    BusStop;
 
     companion object {
         fun getCostumes(decorType: DecorType): List<Costume> {
@@ -60,6 +61,7 @@ enum class DecorType {
                 Mountain -> listOf(Costume.MountainPinBadge)
                 Weather -> listOf(Costume.LeafHat)
                 ThemePark -> listOf(Costume.ThemeParkTicket)
+                BusStop -> listOf(Costume.BusPaperCraft)
             }
         }
     }

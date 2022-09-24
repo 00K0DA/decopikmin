@@ -97,6 +97,7 @@ class PikminListView(
             Costume.Chess -> resources.getText(R.string.costume_chess)
             Costume.ThemeParkTicket -> resources.getText(R.string.costume_theme_park_ticket)
             Costume.FingerBoard -> resources.getText(R.string.costume_theme_finger_board)
+            Costume.BusPaperCraft -> resources.getText(R.string.costume_theme_bus_parer_craft)
         }
         val haveCount = pikminStatusList.filter { it == PikminStatus.AlreadyExists }.size
         val pikminCount = pikminTypeList.size

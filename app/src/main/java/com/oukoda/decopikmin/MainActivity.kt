@@ -114,6 +114,7 @@ class MainActivity : AppCompatActivity() {
             DecorType.Mountain -> resources.getText(R.string.decor_type_mountain)
             DecorType.Weather -> resources.getText(R.string.decor_type_weather)
             DecorType.ThemePark -> resources.getText(R.string.decor_type_theme_park)
+            DecorType.BusStop -> getString(R.string.decor_type_bus_stop)
         }
         return textView
     }

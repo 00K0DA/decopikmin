@@ -37,6 +37,9 @@ enum class Costume(val value: String) {
     // LoadSide
     Sticker("Sticker"),
 
+    // Bus Stop
+    BusPaperCraft("BusPaperCraft"),
+
     // Special
     Mario("Mario"),
     NewYear("NewYear"),
