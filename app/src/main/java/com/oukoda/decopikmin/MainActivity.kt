@@ -9,10 +9,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.oukoda.decopikmin.databinding.ActivityMainBinding
-import com.oukoda.decopikmin.myclass.Costume
-import com.oukoda.decopikmin.myclass.DecorType
-import com.oukoda.decopikmin.myclass.PikminStatus
-import com.oukoda.decopikmin.myclass.PikminType
+import com.oukoda.decopikmin.enum.Costume
+import com.oukoda.decopikmin.enum.DecorType
+import com.oukoda.decopikmin.enum.PikminStatus
+import com.oukoda.decopikmin.enum.PikminType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         sharedPreferences = getPreferences(Context.MODE_PRIVATE)
 
-        val pikminViewListener = object : PikminView.Companion.PikminViewListener {
+        val pikminViewListener = object : PikminListView.Companion.PikminListViewListener {
             override fun onStatusChanged(
                 pikminType: PikminType,
                 costume: Costume,
@@ -56,13 +56,13 @@ class MainActivity : AppCompatActivity() {
             DecorType.getCostumes(decorType).forEach { costume ->
                 val pikminTypeList = Costume.getPikminList(costume)
                 val statusList: List<PikminStatus> = createStatusList(pikminTypeList, costume)
+                val mutablePikminStatusMap = mutableMapOf<PikminType, PikminStatus>()
+                for (i in pikminTypeList.indices){
+                    mutablePikminStatusMap[pikminTypeList[i]] = statusList[i]
+                }
                 haveCount += statusList.filter { it == PikminStatus.AlreadyExists }.size
-                val pikminListView =
-                    PikminListView(applicationContext,
-                    pikminTypeList,
-                    costume,
-                    statusList,
-                    pikminViewListener)
+                val pikminListView = PikminListView(
+                    applicationContext, costume, mutablePikminStatusMap.toMap(), pikminViewListener)
                 binding.cl.addView(pikminListView)
             }
         }
@@ -86,36 +86,7 @@ class MainActivity : AppCompatActivity() {
         textView.textSize = 24F
         textView.gravity = Gravity.CENTER
         textView.setBackgroundColor(Color.parseColor("#FAFAD2"))
-        textView.text = when (decorType) {
-            DecorType.Restaurant -> resources.getText(R.string.decor_type_restaurant)
-            DecorType.Cafe -> resources.getText(R.string.decor_type_cafe)
-            DecorType.Sweetshop -> resources.getText(R.string.decor_type_sweetshop)
-            DecorType.MovieTheater -> resources.getText(R.string.decor_type_movie_theater)
-            DecorType.Pharmacy -> resources.getText(R.string.decor_type_pharmacy)
-            DecorType.Zoo -> resources.getText(R.string.decor_type_zoo)
-            DecorType.Forest -> resources.getText(R.string.decor_type_forest)
-            DecorType.Waterside -> resources.getText(R.string.decor_type_waterside)
-            DecorType.PostOffice -> resources.getText(R.string.decor_type_post_office)
-            DecorType.ArtGallery -> resources.getText(R.string.decor_type_art_gallery)
-            DecorType.Airport -> resources.getText(R.string.decor_type_airport)
-            DecorType.Station -> resources.getText(R.string.decor_type_station)
-            DecorType.Beach -> resources.getText(R.string.decor_type_beach)
-            DecorType.BurgerPlace -> resources.getText(R.string.decor_type_burger_place)
-            DecorType.CornerStore -> resources.getText(R.string.decor_type_corner_store)
-            DecorType.Supermarket -> resources.getText(R.string.decor_type_supermarket)
-            DecorType.Bakery -> resources.getText(R.string.decor_type_bakery)
-            DecorType.HairSalon -> resources.getText(R.string.decor_type_hair_salon)
-            DecorType.ClothesStore -> resources.getText(R.string.decor_type_clothes_store)
-            DecorType.Park -> resources.getText(R.string.decor_type_park)
-            DecorType.LibraryAndBookstore -> resources.getText(R.string.decor_type_library_and_bookstore)
-            DecorType.Special -> resources.getText(R.string.decor_type_special)
-            DecorType.LoadSide -> resources.getText(R.string.decor_type_load_side)
-            DecorType.SushiRestaurant -> resources.getText(R.string.decor_type_sushi_restaurant)
-            DecorType.Mountain -> resources.getText(R.string.decor_type_mountain)
-            DecorType.Weather -> resources.getText(R.string.decor_type_weather)
-            DecorType.ThemePark -> resources.getText(R.string.decor_type_theme_park)
-            DecorType.BusStop -> getString(R.string.decor_type_bus_stop)
-        }
+        textView.text = resources.getText(DecorType.getDecorText(decorType))
         return textView
     }
 

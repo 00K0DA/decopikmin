@@ -1,4 +1,6 @@
-package com.oukoda.decopikmin.myclass
+package com.oukoda.decopikmin.enum
+
+import com.oukoda.decopikmin.R
 
 enum class DecorType {
     Restaurant,
@@ -62,6 +64,39 @@ enum class DecorType {
                 Weather -> listOf(Costume.LeafHat)
                 ThemePark -> listOf(Costume.ThemeParkTicket)
                 BusStop -> listOf(Costume.BusPaperCraft)
+            }
+        }
+
+        fun getDecorText(decorType: DecorType): Int {
+            return when (decorType) {
+                Restaurant -> R.string.decor_type_restaurant
+                Cafe -> R.string.decor_type_cafe
+                Sweetshop -> R.string.decor_type_sweetshop
+                MovieTheater -> R.string.decor_type_movie_theater
+                Pharmacy -> R.string.decor_type_pharmacy
+                Zoo -> R.string.decor_type_zoo
+                Forest -> R.string.decor_type_forest
+                Waterside -> R.string.decor_type_waterside
+                PostOffice -> R.string.decor_type_post_office
+                ArtGallery -> R.string.decor_type_art_gallery
+                Airport -> R.string.decor_type_airport
+                Station -> R.string.decor_type_station
+                Beach -> R.string.decor_type_beach
+                BurgerPlace -> R.string.decor_type_burger_place
+                CornerStore -> R.string.decor_type_corner_store
+                Supermarket -> R.string.decor_type_supermarket
+                Bakery -> R.string.decor_type_bakery
+                HairSalon -> R.string.decor_type_hair_salon
+                ClothesStore -> R.string.decor_type_clothes_store
+                Park -> R.string.decor_type_park
+                LibraryAndBookstore -> R.string.decor_type_library_and_bookstore
+                Special -> R.string.decor_type_special
+                LoadSide -> R.string.decor_type_load_side
+                SushiRestaurant -> R.string.decor_type_sushi_restaurant
+                Mountain -> R.string.decor_type_mountain
+                Weather -> R.string.decor_type_weather
+                ThemePark -> R.string.decor_type_theme_park
+                BusStop -> R.string.decor_type_bus_stop
             }
         }
     }

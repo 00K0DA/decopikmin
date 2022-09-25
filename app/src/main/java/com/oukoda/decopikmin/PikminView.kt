@@ -8,9 +8,9 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.core.content.res.ResourcesCompat
 import com.oukoda.decopikmin.databinding.ViewPikminBinding
-import com.oukoda.decopikmin.myclass.Costume
-import com.oukoda.decopikmin.myclass.PikminStatus
-import com.oukoda.decopikmin.myclass.PikminType
+import com.oukoda.decopikmin.enum.Costume
+import com.oukoda.decopikmin.enum.PikminStatus
+import com.oukoda.decopikmin.enum.PikminType
 
 class PikminView(
     context: Context,

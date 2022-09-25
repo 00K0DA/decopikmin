@@ -1,4 +1,4 @@
-package com.oukoda.decopikmin.myclass
+package com.oukoda.decopikmin.enum
 
 enum class PikminStatus(val value: Int) {
     AlreadyExists(0),
