@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -51,20 +52,25 @@ class MainActivity : AppCompatActivity() {
         }
 
         DecorType.values().forEach { decorType ->
-            val decorTextView = createDecorTextView(decorType)
-            binding.cl.addView(decorTextView)
+            val decorTextView = DecorTextView(
+                applicationContext,
+                resources.getText(DecorType.getDecorText(decorType)).toString()
+            )
             DecorType.getCostumes(decorType).forEach { costume ->
                 val pikminTypeList = Costume.getPikminList(costume)
                 val statusList: List<PikminStatus> = createStatusList(pikminTypeList, costume)
                 val mutablePikminStatusMap = mutableMapOf<PikminType, PikminStatus>()
-                for (i in pikminTypeList.indices){
+                for (i in pikminTypeList.indices) {
                     mutablePikminStatusMap[pikminTypeList[i]] = statusList[i]
                 }
                 haveCount += statusList.filter { it == PikminStatus.AlreadyExists }.size
                 val pikminListView = PikminListView(
-                    applicationContext, costume, mutablePikminStatusMap.toMap(), pikminViewListener)
-                binding.cl.addView(pikminListView)
+                    applicationContext, costume, mutablePikminStatusMap.toMap(), pikminViewListener
+                )
+                pikminListView.id = View.generateViewId()
+                decorTextView.addPikminListView(pikminListView)
             }
+            binding.cl.addView(decorTextView)
         }
         setCompleteText()
     }

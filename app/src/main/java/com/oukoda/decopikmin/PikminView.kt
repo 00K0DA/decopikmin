@@ -89,15 +89,17 @@ class PikminView(
     private fun setDrawableColor() {
         val drawable: GradientDrawable =
             (ResourcesCompat.getDrawable(resources, R.drawable.react, null) ?: return) as GradientDrawable
-        drawable.setColor(when (pikminType) {
-            PikminType.Red -> resources.getColor(R.color.pikmin_red, null)
-            PikminType.Blue -> resources.getColor(R.color.pikmin_blue, null)
-            PikminType.Yellow -> resources.getColor(R.color.pikmin_yellow, null)
-            PikminType.White -> resources.getColor(R.color.pikmin_white, null)
-            PikminType.Purple -> resources.getColor(R.color.pikmin_purple, null)
-            PikminType.Rock -> resources.getColor(R.color.pikmin_rock, null)
-            PikminType.Wing -> resources.getColor(R.color.pikmin_wing, null)
-        })
+        drawable.setColor(
+            when (pikminType) {
+                PikminType.Red -> resources.getColor(R.color.pikmin_red, null)
+                PikminType.Blue -> resources.getColor(R.color.pikmin_blue, null)
+                PikminType.Yellow -> resources.getColor(R.color.pikmin_yellow, null)
+                PikminType.White -> resources.getColor(R.color.pikmin_white, null)
+                PikminType.Purple -> resources.getColor(R.color.pikmin_purple, null)
+                PikminType.Rock -> resources.getColor(R.color.pikmin_rock, null)
+                PikminType.Wing -> resources.getColor(R.color.pikmin_wing, null)
+            }
+        )
         drawable.setStroke(3, Color.BLACK)
         binding.imageView.background = drawable
     }

@@ -19,7 +19,7 @@ class PikminListView(
     private val listener: PikminListViewListener
 ) : ConstraintLayout(context) {
     companion object {
-        interface PikminListViewListener{
+        interface PikminListViewListener {
             fun onStatusChanged(
                 pikminType: PikminType,
                 costume: Costume,
@@ -35,16 +35,20 @@ class PikminListView(
 
     init {
         binding = ViewPikminListBinding.inflate(LayoutInflater.from(context), this, true)
-        pikminView7 = listOf(binding.pikminView71, binding.pikminView72, binding.pikminView73,
-            binding.pikminView74, binding.pikminView75, binding.pikminView76, binding.pikminView77)
-        pikminView4 = listOf(binding.pikminView41, binding.pikminView42, binding.pikminView43,
-            binding.pikminView44)
+        pikminView7 = listOf(
+            binding.pikminView71, binding.pikminView72, binding.pikminView73,
+            binding.pikminView74, binding.pikminView75, binding.pikminView76, binding.pikminView77
+        )
+        pikminView4 = listOf(
+            binding.pikminView41, binding.pikminView42, binding.pikminView43,
+            binding.pikminView44
+        )
         pikminView3 = listOf(binding.pikminView31, binding.pikminView32, binding.pikminView33)
         pikminView1 = listOf(binding.pikminView11)
 
         setCostumeTextView()
         val viewList: List<FrameLayout>
-            when (pikminStatusMap.size) {
+        when (pikminStatusMap.size) {
             pikminView7.size -> {
                 viewList = pikminView7
                 enableView(binding.clPikmin7)
@@ -86,7 +90,7 @@ class PikminListView(
     }
 
     private fun createPikminView(pikminType: PikminType, pikminStatus: PikminStatus): PikminView {
-        val pikminViewListener = object: PikminView.Companion.PikminViewListener{
+        val pikminViewListener = object : PikminView.Companion.PikminViewListener {
             override fun onStatusChanged(
                 pikminType: PikminType,
                 costume: Costume,
@@ -98,7 +102,6 @@ class PikminListView(
                 setCostumeTextView()
                 listener.onStatusChanged(pikminType, costume, pikminStatus)
             }
-
         }
         return PikminView(context, pikminType, costume, pikminStatus, pikminViewListener)
     }
