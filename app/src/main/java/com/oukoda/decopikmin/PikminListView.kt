@@ -15,14 +15,13 @@ import com.oukoda.decopikmin.enum.PikminStatus
 class PikminListView(
     context: Context,
     private val costume: Costume,
-    private val pikminList: List<Pikmin>,
-    private val listener: PikminListViewListener
+    pikminList: List<Pikmin>,
+    private var pikminStatusListener: PikminStatusListener?
 ) : ConstraintLayout(context) {
+
     companion object {
-        interface PikminListViewListener {
-            fun onStatusChanged(
-                updatePikmin: Pikmin
-            )
+        interface PikminStatusListener {
+            fun onUpdateStatus(pikmin: Pikmin, oldStatus: PikminStatus)
         }
     }
 
@@ -31,6 +30,21 @@ class PikminListView(
     private var pikminView4: List<FrameLayout>
     private var pikminView3: List<FrameLayout>
     private var pikminView1: List<FrameLayout>
+    private val pikminViewList: List<PikminView>
+    private val pikminCount: Int
+    private var collectedPikminCount = 0
+
+    private val statusListener = object : PikminView.Companion.PikminStatusListener {
+        override fun onUpdateStatus(pikmin: Pikmin, oldStatus: PikminStatus) {
+            if (oldStatus == PikminStatus.NotHave) {
+                collectedPikminCount += 1
+            } else if (pikmin.pikminStatus == PikminStatus.NotHave) {
+                collectedPikminCount -= 1
+            }
+            setCostumeTextView()
+            pikminStatusListener?.onUpdateStatus(pikmin, oldStatus)
+        }
+    }
 
     init {
         binding = ViewPikminListBinding.inflate(LayoutInflater.from(context), this, true)
@@ -45,7 +59,6 @@ class PikminListView(
         pikminView3 = listOf(binding.pikminView31, binding.pikminView32, binding.pikminView33)
         pikminView1 = listOf(binding.pikminView11)
 
-        setCostumeTextView()
         val viewList: List<FrameLayout>
         when (pikminList.size) {
             pikminView7.size -> {
@@ -66,51 +79,49 @@ class PikminListView(
             }
             else -> throw IllegalArgumentException("invalid pikmin list = $pikminList")
         }
+        collectedPikminCount = pikminList.filter { it.pikminStatus != PikminStatus.NotHave }.size
+        pikminCount = pikminList.size
+        setCostumeTextView()
+
         var viewIndex = 0
+        val mutablePikminViewList = mutableListOf<PikminView>()
         for (i in pikminList.indices) {
             val pikmin = pikminList[i]
-            viewList[viewIndex].addView(createPikminView(pikmin))
+            val pikminView = createPikminView(pikmin)
+            mutablePikminViewList.add(pikminView)
+            viewList[viewIndex].addView(pikminView)
             viewIndex += 1
         }
+        pikminViewList = mutablePikminViewList.toList()
     }
+
+    fun setListener(pikminStatusListener: PikminStatusListener) {
+        this.pikminStatusListener = pikminStatusListener
+        pikminViewList.forEach { view ->
+            view.setListener(statusListener)
+        }
+    }
+
+    fun removeListener() {
+        pikminStatusListener = null
+        pikminViewList.forEach { view ->
+            view.removeListener()
+        }
+    }
+
+    fun getPikminCount() = pikminCount
+
+    fun getCollectedPikminCount() = collectedPikminCount
 
     private fun setCostumeTextView() {
         val costumeText = resources.getText(Costume.getCostumeTextId(costume))
-        val haveCount = pikminList.filter { it.pikminStatus == PikminStatus.AlreadyExists }.size
-        val pikminCount = pikminList.size
-        if (haveCount == pikminCount) {
-            binding.tvCostume.text =
-                resources.getText(R.string.pikmin_list_view_complete).toString()
-                    .format(costumeText)
-        } else {
-            binding.tvCostume.text =
-                resources.getText(R.string.pikmin_list_view_progress).toString()
-                    .format(costumeText, haveCount, pikminCount)
-        }
+        binding.tvCostume.text =
+            resources.getText(R.string.pikmin_list_view_progress).toString()
+                .format(costumeText, collectedPikminCount, pikminCount)
     }
 
     private fun createPikminView(pikmin: Pikmin): PikminView {
-        val pikminViewListener = object : PikminView.Companion.PikminViewListener {
-            override fun onStatusChanged(
-                updatePikmin: Pikmin
-            ) {
-                var index = -1
-                for (i in pikminList.indices) {
-                    val tempPikmin = pikminList[i]
-                    if (tempPikmin == updatePikmin) {
-                        index = i
-                    }
-                }
-                if (index != -1) {
-                    val mutableList = pikminList.toMutableList()
-                    mutableList[index] = updatePikmin
-
-                    setCostumeTextView()
-                    listener.onStatusChanged(updatePikmin)
-                }
-            }
-        }
-        return PikminView(context, pikmin, pikminViewListener)
+        return PikminView(context, pikmin, statusListener)
     }
 
     private fun enableView(view: View) {
@@ -118,4 +129,5 @@ class PikminListView(
         view.isClickable = true
         view.focusable = FOCUSABLE
     }
+
 }

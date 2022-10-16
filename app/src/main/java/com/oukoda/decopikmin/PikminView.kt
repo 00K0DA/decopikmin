@@ -10,24 +10,22 @@ import android.widget.LinearLayout
 import androidx.core.content.res.ResourcesCompat
 import com.oukoda.decopikmin.databinding.ViewPikminBinding
 import com.oukoda.decopikmin.dataclass.Pikmin
-import com.oukoda.decopikmin.enum.Costume
 import com.oukoda.decopikmin.enum.PikminStatus
 import com.oukoda.decopikmin.enum.PikminType
+import java.util.concurrent.atomic.AtomicInteger
 
 @SuppressLint("ViewConstructor")
 class PikminView(
     context: Context,
     private val pikmin: Pikmin,
-    private val listener: PikminViewListener
+    private var pikminStatusListener: PikminStatusListener?
 ) :
     LinearLayout(context) {
     companion object {
         val TAG: String? = PikminView::class.simpleName
 
-        interface PikminViewListener {
-            fun onStatusChanged(
-                updatePikmin: Pikmin
-            )
+        interface PikminStatusListener {
+            fun onUpdateStatus(pikmin: Pikmin, oldStatus: PikminStatus)
         }
     }
 
@@ -41,10 +39,19 @@ class PikminView(
         setDrawableColor()
 
         binding.cl.setOnClickListener {
+            val oldStatus = pikmin.pikminStatus
             pikmin.statusUpdate()
             setStatusText()
-            listener.onStatusChanged(pikmin)
+            pikminStatusListener?.onUpdateStatus(pikmin, oldStatus)
         }
+    }
+
+    fun setListener(pikminStatusListener: PikminStatusListener) {
+        this.pikminStatusListener = pikminStatusListener
+    }
+
+    fun removeListener() {
+        pikminStatusListener = null
     }
 
     private fun setPikminTypeText() {

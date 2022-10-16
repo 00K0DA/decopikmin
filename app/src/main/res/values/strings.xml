@@ -79,5 +79,5 @@
     <string name="costume_theme_bus_parer_craft">バスのペーパークラフト</string>
 
 
-    <string name="activity_main_complete_title">コンプリート率: %3.2f\%%</string>
+    <string name="activity_main_complete_title">コンプリート率: %3.2f\%%(%d/%d)</string>
 </resources>
