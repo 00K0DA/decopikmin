@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.oukoda.decopikmin.databinding.ActivityMainBinding
+import com.oukoda.decopikmin.dataclass.Pikmin
 import com.oukoda.decopikmin.enum.Costume
 import com.oukoda.decopikmin.enum.DecorType
 import com.oukoda.decopikmin.enum.PikminStatus
@@ -36,15 +37,13 @@ class MainActivity : AppCompatActivity() {
 
         val pikminViewListener = object : PikminListView.Companion.PikminListViewListener {
             override fun onStatusChanged(
-                pikminType: PikminType,
-                costume: Costume,
-                pikminStatus: PikminStatus
+                updatePikmin: Pikmin
             ) {
-                val key = createStatusKey(pikminType, costume)
-                sharedPreferences.edit().putInt(key, pikminStatus.value).apply()
-                if (pikminStatus == PikminStatus.AlreadyExists) {
+                val key = updatePikmin.createStatusKey()
+                sharedPreferences.edit().putInt(key, updatePikmin.pikminStatus.value).apply()
+                if (updatePikmin.pikminStatus == PikminStatus.AlreadyExists) {
                     haveCount += 1
-                } else if (pikminStatus == PikminStatus.NotHave) {
+                } else if (updatePikmin.pikminStatus == PikminStatus.NotHave) {
                     haveCount -= 1
                 }
                 setCompleteText()
@@ -57,47 +56,30 @@ class MainActivity : AppCompatActivity() {
                 resources.getText(DecorType.getDecorText(decorType)).toString()
             )
             DecorType.getCostumes(decorType).forEach { costume ->
+                val mutablePikminList = mutableListOf<Pikmin>()
                 val pikminTypeList = Costume.getPikminList(costume)
-                val statusList: List<PikminStatus> = createStatusList(pikminTypeList, costume)
-                val mutablePikminStatusMap = mutableMapOf<PikminType, PikminStatus>()
                 for (i in pikminTypeList.indices) {
-                    mutablePikminStatusMap[pikminTypeList[i]] = statusList[i]
+                    val pikminType = pikminTypeList[i]
+                    val number = mutablePikminList.count { it.pikminType == pikminType }
+                    val pikmin = Pikmin.newInstance(decorType, costume, pikminType, number)
+                    val key = pikmin.createStatusKey()
+                    pikmin.pikminStatus =
+                        PikminStatus.create(
+                            sharedPreferences.getInt(key, PikminStatus.NotHave.value)
+                        )
+                    mutablePikminList.add(pikmin)
                 }
-                haveCount += statusList.filter { it == PikminStatus.AlreadyExists }.size
                 val pikminListView = PikminListView(
-                    applicationContext, costume, mutablePikminStatusMap.toMap(), pikminViewListener
+                    applicationContext,
+                    costume,
+                    mutablePikminList.toList(),
+                    pikminViewListener
                 )
-                pikminListView.id = View.generateViewId()
                 decorTextView.addPikminListView(pikminListView)
             }
             binding.cl.addView(decorTextView)
         }
         setCompleteText()
-    }
-
-    private fun createStatusList(pikminTypeList: List<PikminType>, costume: Costume): List<PikminStatus> {
-        val statusList: MutableList<PikminStatus> = mutableListOf()
-        pikminTypeList.forEach { pikminType ->
-            val key = createStatusKey(pikminType, costume)
-            val status = PikminStatus.create(
-                sharedPreferences.getInt(key, PikminStatus.NotHave.value)
-            )
-            statusList.add(status)
-        }
-        return statusList.toList()
-    }
-
-    private fun createDecorTextView(decorType: DecorType): TextView {
-        val textView = TextView(applicationContext)
-        textView.textSize = 24F
-        textView.gravity = Gravity.CENTER
-        textView.setBackgroundColor(Color.parseColor("#FAFAD2"))
-        textView.text = resources.getText(DecorType.getDecorText(decorType))
-        return textView
-    }
-
-    private fun createStatusKey(pikminType: PikminType, costume: Costume): String {
-        return "${pikminType.value}-${costume.value}"
     }
 
     private fun setCompleteText() {
@@ -108,22 +90,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }

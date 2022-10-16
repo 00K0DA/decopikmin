@@ -7,26 +7,25 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.oukoda.decopikmin.databinding.ViewPikminListBinding
+import com.oukoda.decopikmin.dataclass.Pikmin
 import com.oukoda.decopikmin.enum.Costume
 import com.oukoda.decopikmin.enum.PikminStatus
-import com.oukoda.decopikmin.enum.PikminType
 
 @SuppressLint("ViewConstructor")
 class PikminListView(
     context: Context,
     private val costume: Costume,
-    private var pikminStatusMap: Map<PikminType, PikminStatus>,
+    private val pikminList: List<Pikmin>,
     private val listener: PikminListViewListener
 ) : ConstraintLayout(context) {
     companion object {
         interface PikminListViewListener {
             fun onStatusChanged(
-                pikminType: PikminType,
-                costume: Costume,
-                pikminStatus: PikminStatus
+                updatePikmin: Pikmin
             )
         }
     }
+
     private val binding: ViewPikminListBinding
     private var pikminView7: List<FrameLayout>
     private var pikminView4: List<FrameLayout>
@@ -48,7 +47,7 @@ class PikminListView(
 
         setCostumeTextView()
         val viewList: List<FrameLayout>
-        when (pikminStatusMap.size) {
+        when (pikminList.size) {
             pikminView7.size -> {
                 viewList = pikminView7
                 enableView(binding.clPikmin7)
@@ -65,19 +64,20 @@ class PikminListView(
                 viewList = pikminView1
                 enableView(binding.clPikmin1)
             }
-            else -> throw IllegalArgumentException("invalid pikmin list = $pikminStatusMap")
+            else -> throw IllegalArgumentException("invalid pikmin list = $pikminList")
         }
         var viewIndex = 0
-        for ((pikminType, pikminStatus) in pikminStatusMap) {
-            viewList[viewIndex].addView(createPikminView(pikminType, pikminStatus))
+        for (i in pikminList.indices) {
+            val pikmin = pikminList[i]
+            viewList[viewIndex].addView(createPikminView(pikmin))
             viewIndex += 1
         }
     }
 
     private fun setCostumeTextView() {
         val costumeText = resources.getText(Costume.getCostumeTextId(costume))
-        val haveCount = pikminStatusMap.values.filter { it == PikminStatus.AlreadyExists }.size
-        val pikminCount = pikminStatusMap.keys.size
+        val haveCount = pikminList.filter { it.pikminStatus == PikminStatus.AlreadyExists }.size
+        val pikminCount = pikminList.size
         if (haveCount == pikminCount) {
             binding.tvCostume.text =
                 resources.getText(R.string.pikmin_list_view_complete).toString()
@@ -89,21 +89,28 @@ class PikminListView(
         }
     }
 
-    private fun createPikminView(pikminType: PikminType, pikminStatus: PikminStatus): PikminView {
+    private fun createPikminView(pikmin: Pikmin): PikminView {
         val pikminViewListener = object : PikminView.Companion.PikminViewListener {
             override fun onStatusChanged(
-                pikminType: PikminType,
-                costume: Costume,
-                pikminStatus: PikminStatus
+                updatePikmin: Pikmin
             ) {
-                val mutableMap = pikminStatusMap.toMutableMap()
-                mutableMap[pikminType] = pikminStatus
-                pikminStatusMap = mutableMap.toMap()
-                setCostumeTextView()
-                listener.onStatusChanged(pikminType, costume, pikminStatus)
+                var index = -1
+                for (i in pikminList.indices) {
+                    val tempPikmin = pikminList[i]
+                    if (tempPikmin == updatePikmin) {
+                        index = i
+                    }
+                }
+                if (index != -1) {
+                    val mutableList = pikminList.toMutableList()
+                    mutableList[index] = updatePikmin
+
+                    setCostumeTextView()
+                    listener.onStatusChanged(updatePikmin)
+                }
             }
         }
-        return PikminView(context, pikminType, costume, pikminStatus, pikminViewListener)
+        return PikminView(context, pikmin, pikminViewListener)
     }
 
     private fun enableView(view: View) {

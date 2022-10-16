@@ -1,5 +1,6 @@
 package com.oukoda.decopikmin
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -8,30 +9,30 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.core.content.res.ResourcesCompat
 import com.oukoda.decopikmin.databinding.ViewPikminBinding
+import com.oukoda.decopikmin.dataclass.Pikmin
 import com.oukoda.decopikmin.enum.Costume
 import com.oukoda.decopikmin.enum.PikminStatus
 import com.oukoda.decopikmin.enum.PikminType
 
+@SuppressLint("ViewConstructor")
 class PikminView(
     context: Context,
-    private val pikminType: PikminType,
-    private val costume: Costume,
-    private var pikminStatus: PikminStatus,
+    private val pikmin: Pikmin,
     private val listener: PikminViewListener
 ) :
     LinearLayout(context) {
     companion object {
         val TAG: String? = PikminView::class.simpleName
+
         interface PikminViewListener {
             fun onStatusChanged(
-                pikminType: PikminType,
-                costume: Costume,
-                pikminStatus: PikminStatus
+                updatePikmin: Pikmin
             )
         }
     }
 
     private val binding: ViewPikminBinding
+
     init {
         binding = ViewPikminBinding.inflate(LayoutInflater.from(context), this, true)
         orientation = HORIZONTAL
@@ -40,37 +41,21 @@ class PikminView(
         setDrawableColor()
 
         binding.cl.setOnClickListener {
-            updateStatus()
+            pikmin.statusUpdate()
             setStatusText()
-            listener.onStatusChanged(pikminType, costume, pikminStatus)
-        }
-    }
-
-    private fun updateStatus() {
-        pikminStatus = when (pikminStatus) {
-            PikminStatus.AlreadyExists -> PikminStatus.Growing
-            PikminStatus.Growing -> PikminStatus.NotHave
-            PikminStatus.NotHave -> PikminStatus.AlreadyExists
+            listener.onStatusChanged(pikmin)
         }
     }
 
     private fun setPikminTypeText() {
-        Log.d(TAG, "setPikminTypeText: $costume $pikminType $pikminStatus")
-        Log.d(TAG, "setPikminTypeText: ${binding.tvPikminType.text}")
-        binding.tvPikminType.text = when (pikminType) {
-            PikminType.Red -> "赤"
-            PikminType.Blue -> "青"
-            PikminType.Yellow -> "黄"
-            PikminType.White -> "白"
-            PikminType.Purple -> "紫"
-            PikminType.Rock -> "岩"
-            PikminType.Wing -> "羽"
-        }
+        Log.d(TAG, "setPikminTypeText: $pikmin")
+        binding.tvPikminType.text =
+            resources.getText(PikminType.getPikminStringId(pikmin.pikminType))
         binding.tvPikminType.setTextColor(Color.WHITE)
     }
 
     private fun setStatusText() {
-        when (pikminStatus) {
+        when (pikmin.pikminStatus) {
             PikminStatus.AlreadyExists -> {
                 binding.tvStatus.text = "保持"
                 binding.tvStatus.setTextColor(Color.parseColor("#4DB56A"))
@@ -88,9 +73,10 @@ class PikminView(
 
     private fun setDrawableColor() {
         val drawable: GradientDrawable =
-            (ResourcesCompat.getDrawable(resources, R.drawable.react, null) ?: return) as GradientDrawable
+            (ResourcesCompat.getDrawable(resources, R.drawable.react, null)
+                ?: return) as GradientDrawable
         drawable.setColor(
-            when (pikminType) {
+            when (pikmin.pikminType) {
                 PikminType.Red -> resources.getColor(R.color.pikmin_red, null)
                 PikminType.Blue -> resources.getColor(R.color.pikmin_blue, null)
                 PikminType.Yellow -> resources.getColor(R.color.pikmin_yellow, null)

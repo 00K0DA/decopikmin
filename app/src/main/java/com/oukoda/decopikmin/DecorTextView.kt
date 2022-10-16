@@ -1,5 +1,6 @@
 package com.oukoda.decopikmin
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,29 +9,34 @@ import android.view.animation.RotateAnimation
 import android.widget.LinearLayout
 import com.oukoda.decopikmin.databinding.ViewDecorTextBinding
 
+@SuppressLint("ViewConstructor")
 class DecorTextView(
     context: Context,
-    private val decorText: String
+    decorText: String
 ) :
     LinearLayout(context) {
 
-    var isOpen = false
-
     companion object {
         val TAG: String? = DecorTextView::class.simpleName
+
+        private const val ANIMATION_DURATION = 275L
+
+        private val closeAnimation = RotateAnimation(
+            180.0f, 360.0f,
+            Animation.RELATIVE_TO_SELF, 0.5f,
+            Animation.RELATIVE_TO_SELF, 0.5f
+        )
+
+        private val openAnimation = RotateAnimation(
+            0.0f, 180.0f,
+            Animation.RELATIVE_TO_SELF, 0.5f,
+            Animation.RELATIVE_TO_SELF, 0.5f
+        )
     }
 
     private val binding: ViewDecorTextBinding
-    private val openAnimation = RotateAnimation(
-        0.0f, 180.0f,
-        Animation.RELATIVE_TO_SELF, 0.5f,
-        Animation.RELATIVE_TO_SELF, 0.5f
-    )
-    private val closeAnimation = RotateAnimation(
-        180.0f, 360.0f,
-        Animation.RELATIVE_TO_SELF, 0.5f,
-        Animation.RELATIVE_TO_SELF, 0.5f
-    )
+    var isOpen = false
+
 
     init {
         binding = ViewDecorTextBinding.inflate(LayoutInflater.from(context), this, true)
@@ -59,7 +65,7 @@ class DecorTextView(
     }
 
     private fun setAnimationSetting(animation: RotateAnimation) {
-        animation.duration = 275
+        animation.duration = ANIMATION_DURATION
         animation.repeatCount = 0
         animation.fillAfter = true
         animation.setAnimationListener(object : Animation.AnimationListener {

@@ -1,6 +1,15 @@
 <resources>
     <string name="pikmin_list_view_complete">%s(Complete)</string>
     <string name="pikmin_list_view_progress">%s(%d/%d)</string>
+
+    <string name="pikmin_type_red">赤</string>
+    <string name="pikmin_type_blue">青</string>
+    <string name="pikmin_type_yellow">黄</string>
+    <string name="pikmin_type_white">白</string>
+    <string name="pikmin_type_purple">紫</string>
+    <string name="pikmin_type_rock">岩</string>
+    <string name="pikmin_type_wing">羽</string>
+
     <string name="app_name">decopikmin</string>
     <string name="decor_type_restaurant">レストラン</string>
     <string name="decor_type_cafe">カフェ</string>
