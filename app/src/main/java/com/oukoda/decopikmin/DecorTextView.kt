@@ -130,7 +130,9 @@ class DecorTextView(
     }
 
     fun setPikminCount() {
-        binding.tvCount.text = "%d/%d".format(collectedPikminCount, pikminCount)
+        binding.tvCount.text = resources.getText(R.string.decor_text_view_pikmin_count).toString()
+            .format(collectedPikminCount, pikminCount)
+        
     }
 
     fun getCollectedPikminCount() = collectedPikminCount

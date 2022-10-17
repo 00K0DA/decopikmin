@@ -7,6 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="pikmin_status_growing">#FF7E00</color>
+    <color name="pikmin_status_already">#4DB56A</color>
+    <color name="pikmin_status_not_have">#797979</color>
+
     <color name="pikmin_red">#C64A41</color>
     <color name="pikmin_blue">#3E6AC8</color>
     <color name="pikmin_yellow">#DDC35B</color>

@@ -64,16 +64,31 @@ class PikminView(
     private fun setStatusText() {
         when (pikmin.pikminStatus) {
             PikminStatus.AlreadyExists -> {
-                binding.tvStatus.text = "保持"
-                binding.tvStatus.setTextColor(Color.parseColor("#4DB56A"))
+                binding.tvStatus.text = resources.getText(R.string.pikmin_status_already)
+                binding.tvStatus.setTextColor(
+                    resources.getColor(
+                        R.color.pikmin_status_already,
+                        null
+                    )
+                )
             }
             PikminStatus.Growing -> {
-                binding.tvStatus.text = "育成中"
-                binding.tvStatus.setTextColor(Color.parseColor("#FF7E00"))
+                binding.tvStatus.text = resources.getText(R.string.pikmin_status_growing)
+                binding.tvStatus.setTextColor(
+                    resources.getColor(
+                        R.color.pikmin_status_growing,
+                        null
+                    )
+                )
             }
             PikminStatus.NotHave -> {
-                binding.tvStatus.text = "未保持"
-                binding.tvStatus.setTextColor(Color.GRAY)
+                binding.tvStatus.text = resources.getText(R.string.pikmin_status_not_have)
+                binding.tvStatus.setTextColor(
+                    resources.getColor(
+                        R.color.pikmin_status_not_have,
+                        null
+                    )
+                )
             }
         }
     }

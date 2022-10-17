@@ -57,7 +57,14 @@ enum class DecorType {
                 Park -> listOf(Costume.Clover, Costume.FourLeafClover)
                 LibraryAndBookstore -> listOf(Costume.TinyBook)
                 Special ->
-                    listOf(Costume.Mario, Costume.NewYear, Costume.Chess, Costume.FingerBoard)
+                    listOf(
+                        Costume.Mario,
+                        Costume.NewYear,
+                        Costume.Chess,
+                        Costume.FingerBoard,
+                        Costume.FlowerCard,
+                        Costume.JackOLantern
+                    )
                 LoadSide -> listOf(Costume.Sticker)
                 SushiRestaurant -> listOf(Costume.Sushi)
                 Mountain -> listOf(Costume.MountainPinBadge)

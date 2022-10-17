@@ -47,6 +47,8 @@ enum class Costume(val value: String) {
     NewYear("NewYear"),
     Chess("Chess"),
     FingerBoard("FingerBoard"),
+    FlowerCard("FlowerCard"),
+    JackOLantern("JackOLantern"),
 
     ThemeParkTicket("ThemeParkTicket");
 
@@ -61,6 +63,8 @@ enum class Costume(val value: String) {
                     listOf(PikminType.Red, PikminType.Blue, PikminType.Yellow)
                 FingerBoard ->
                     listOf(PikminType.Red, PikminType.Yellow, PikminType.Purple, PikminType.Wing)
+                FlowerCard ->
+                    listOf(PikminType.Red, PikminType.Yellow, PikminType.Blue, PikminType.Purple)
                 else -> PikminType.values().toList()
             }
         }
@@ -105,6 +109,8 @@ enum class Costume(val value: String) {
                 Chess -> R.string.costume_chess
                 ThemeParkTicket -> R.string.costume_theme_park_ticket
                 FingerBoard -> R.string.costume_theme_finger_board
+                FlowerCard -> R.string.costume_theme_flower_card
+                JackOLantern -> R.string.costume_theme_jack_o_lantern
                 BusPaperCraft -> R.string.costume_theme_bus_parer_craft
             }
         }
