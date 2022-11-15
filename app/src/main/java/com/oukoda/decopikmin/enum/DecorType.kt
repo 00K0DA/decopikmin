@@ -63,7 +63,8 @@ enum class DecorType {
                         Costume.Chess,
                         Costume.FingerBoard,
                         Costume.FlowerCard,
-                        Costume.JackOLantern
+                        Costume.JackOLantern,
+                        Costume.FirstAnniversary
                     )
                 LoadSide -> listOf(Costume.Sticker)
                 SushiRestaurant -> listOf(Costume.Sushi)

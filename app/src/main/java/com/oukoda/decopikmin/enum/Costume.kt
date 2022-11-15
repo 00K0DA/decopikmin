@@ -49,6 +49,7 @@ enum class Costume(val value: String) {
     FingerBoard("FingerBoard"),
     FlowerCard("FlowerCard"),
     JackOLantern("JackOLantern"),
+    FirstAnniversary("FirstAnniversary"),
 
     ThemeParkTicket("ThemeParkTicket");
 
@@ -112,6 +113,7 @@ enum class Costume(val value: String) {
                 FlowerCard -> R.string.costume_theme_flower_card
                 JackOLantern -> R.string.costume_theme_jack_o_lantern
                 BusPaperCraft -> R.string.costume_theme_bus_parer_craft
+                FirstAnniversary -> R.string.costume_theme_first_anniversary_snack
             }
         }
     }

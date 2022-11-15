@@ -86,7 +86,7 @@
     <string name="costume_theme_flower_card">花札</string>
     <string name="costume_theme_jack_o_lantern">お化けかぼちゃ</string>
     <string name="costume_theme_bus_parer_craft">バスのペーパークラフト</string>
-
-
+    <string name="costume_theme_first_anniversary_snack">1周年記念スナック</string>
+    
     <string name="activity_main_complete_title">コンプリート率: %3.2f\%%(%d/%d)</string>
 </resources>
